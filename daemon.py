@@ -54,13 +54,14 @@ class daemon:
 		pid = str(os.getpid())
 		with open(self.pidfile,'w+') as f:
 			f.write(pid + '\n')
+		print( "daemonize, completed pid file: " + pid)
 	
 	def delpid(self):
 		os.remove(self.pidfile)
 
 	def start(self):
 		"""Start the daemon."""
-
+		print("Starting the daemon...")
 		# Check for a pidfile to see if the daemon already runs
 		try:
 			with open(self.pidfile,'r') as pf:
@@ -77,6 +78,7 @@ class daemon:
 		
 		# Start the daemon
 		self.daemonize()
+		print( "Call run"  )
 		self.run()
 
 	def stop(self):
