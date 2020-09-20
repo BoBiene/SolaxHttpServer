@@ -37,7 +37,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
 class MyDaemon(daemon):
         def run(self):
-            httpd = HTTPServer(('localhost', 8000), SimpleHTTPRequestHandler)
+            httpd = HTTPServer(('', 80), SimpleHTTPRequestHandler)
             httpd.serve_forever()
 
 if __name__ == "__main__":
