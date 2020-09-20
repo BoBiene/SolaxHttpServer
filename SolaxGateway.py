@@ -2,7 +2,6 @@ import solax
 import asyncio
 import json
 import sys
-from daemon import daemon
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
