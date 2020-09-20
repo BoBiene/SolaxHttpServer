@@ -35,20 +35,21 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 self.wfile.write(dataAsJson.encode('utf-8'))
 
 
-class MyDaemon(daemon):
-        def run(self):
-            httpd = HTTPServer(('', 80), SimpleHTTPRequestHandler)
-            httpd.serve_forever()
+class SolaxDaemon(daemon):
+        def run(self):               
+                print("Starting server...")
+                httpd = HTTPServer(('', 80), SimpleHTTPRequestHandler)
+                httpd.serve_forever()
 
 if __name__ == "__main__":
-        daemon = MyDaemon('/tmp/daemon-example.pid')
+        solaxDaemon = SolaxDaemon('/tmp/SolaxGateway.pid')
         if len(sys.argv) == 2:
                 if 'start' == sys.argv[1]:
-                        daemon.start()
+                        solaxDaemon.start()
                 elif 'stop' == sys.argv[1]:
-                        daemon.stop()
+                        solaxDaemon.stop()
                 elif 'restart' == sys.argv[1]:
-                        daemon.restart()
+                        solaxDaemon.restart()
                 else:
                         print( "Unknown command" )
                         sys.exit(2)
