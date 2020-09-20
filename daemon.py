@@ -40,12 +40,17 @@ class daemon:
 			sys.exit(1) 
 	
 		print ("redirect standard file descriptors")
-		# redirect standard file descriptors
-		sys.stdout.flush()
-		sys.stderr.flush()
-		si = open(os.devnull, 'r')
-		so = open(os.devnull, 'a+')
-		se = open(os.devnull, 'a+')
+		try: 
+			# redirect standard file descriptors
+			sys.stdout.flush()
+			sys.stderr.flush()
+			si = open(os.devnull, 'r')
+			so = open(os.devnull, 'a+')
+			se = open(os.devnull, 'a+')
+		except Exception as err:
+			sys.stderr.write('redirect standard file descriptors: {0}\n'.format(err))
+			sys.exit(1) 
+
 
 		os.dup2(si.fileno(), sys.stdin.fileno())
 		os.dup2(so.fileno(), sys.stdout.fileno())
