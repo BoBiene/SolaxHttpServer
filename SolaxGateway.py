@@ -35,5 +35,5 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     
 print("Starting server...")
-httpd = HTTPServer(('', 80), SimpleHTTPRequestHandler)
+httpd = HTTPServer(('', 8000), SimpleHTTPRequestHandler)
 httpd.serve_forever()
