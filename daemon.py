@@ -11,7 +11,7 @@ class daemon:
 	
 	def daemonize(self):
 		"""Deamonize class. UNIX double fork mechanism."""
-
+		print ("daemonize")
 		try: 
 			pid = os.fork() 
 			if pid > 0:
@@ -21,11 +21,13 @@ class daemon:
 			sys.stderr.write('fork #1 failed: {0}\n'.format(err))
 			sys.exit(1)
 	
+		print ("decouple from parent environment")
 		# decouple from parent environment
 		os.chdir('/') 
 		os.setsid() 
 		os.umask(0) 
 	
+		print ("do second fork")
 		# do second fork
 		try: 
 			pid = os.fork() 
@@ -37,6 +39,7 @@ class daemon:
 			sys.stderr.write('fork #2 failed: {0}\n'.format(err))
 			sys.exit(1) 
 	
+		print ("redirect standard file descriptors")
 		# redirect standard file descriptors
 		sys.stdout.flush()
 		sys.stderr.flush()
@@ -48,6 +51,7 @@ class daemon:
 		os.dup2(so.fileno(), sys.stdout.fileno())
 		os.dup2(se.fileno(), sys.stderr.fileno())
 	
+		print ("write pidfile")
 		# write pidfile
 		atexit.register(self.delpid)
 
