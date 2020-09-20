@@ -1,6 +1,8 @@
 import solax
 import asyncio
 import json
+import sys
+from daemon import daemon
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
@@ -33,5 +35,24 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 self.wfile.write(dataAsJson.encode('utf-8'))
 
 
-httpd = HTTPServer(('localhost', 8000), SimpleHTTPRequestHandler)
-httpd.serve_forever()
+class MyDaemon(daemon):
+        def run(self):
+            httpd = HTTPServer(('localhost', 8000), SimpleHTTPRequestHandler)
+            httpd.serve_forever()
+
+if __name__ == "__main__":
+        daemon = MyDaemon('/tmp/daemon-example.pid')
+        if len(sys.argv) == 2:
+                if 'start' == sys.argv[1]:
+                        daemon.start()
+                elif 'stop' == sys.argv[1]:
+                        daemon.stop()
+                elif 'restart' == sys.argv[1]:
+                        daemon.restart()
+                else:
+                        print( "Unknown command" )
+                        sys.exit(2)
+                sys.exit(0)
+        else:
+                print ( "usage: %s start|stop|restart" % sys.argv[0] )
+                sys.exit(2)
