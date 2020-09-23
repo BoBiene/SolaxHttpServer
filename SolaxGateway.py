@@ -22,18 +22,18 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             asyncio.set_event_loop(loop)
             responseTasks, timedout = loop.run_until_complete(asyncio.wait([LoadSolaxData()],timeout=10))
             replyMessage = ""
-            solaxIsOnline = ""
+            solaxIsOffline = ""
             if timedout:
                 [task.cancel() for task in timedout]
                 loop.run_until_complete(asyncio.wait(timedout))
                 replyMessage = offline_message
-                solaxIsOnline = "false"
+                solaxIsOffline = "true"
             else:
                 responseTask = responseTasks.pop()
                 response = responseTask.result()
                 replyMessage = json.dumps(response.data)
-                solaxIsOnline = "true"
-            replyMessage = replyMessage[:1] + '"DeviceIsOnline": ' + solaxIsOnline + ', ' +  replyMessage[1:] 
+                solaxIsOffline = "false"
+            replyMessage = replyMessage[:1] + '"DeviceIsOffline": ' + solaxIsOffline + ', ' +  replyMessage[1:] 
             self.send_response(200)
             self.end_headers()
             self.wfile.write(replyMessage.encode('utf-8'))
