@@ -1,0 +1,15 @@
+[Unit]
+Description=HttpGateway for Solax
+After=network.target
+StartLimitIntervalSec=0
+StartLimitBurst=3000
+
+[Service]
+Restart=always
+RestartSec=3
+Type=simple
+ExecStart=python3 /home/pi/SolaxGateway.py
+ExecStop=/bin/kill -SIGKILL $MAINPID
+
+[Install]
+WantedBy=multi-user.target
