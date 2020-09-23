@@ -10,6 +10,8 @@ pip3 install solax
 
 git clone https://github.com/BoBiene/SolaxHttpServer.git
 cd SolaxHttpServer/
+sudo cp SolaxGateway.service /etc/systemd/system/
+systemctl daemon-reload
 ````
 
 ## starting service
