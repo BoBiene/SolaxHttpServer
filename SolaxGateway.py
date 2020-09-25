@@ -37,8 +37,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.end_headers()
             self.wfile.write(replyMessage.encode('utf-8'))
-
-    
-print("Starting server...")
-httpd = HTTPServer(('', 8000), SimpleHTTPRequestHandler)
-httpd.serve_forever()
+            
+while True:
+    try:
+        print("Starting server...")
+        httpd = HTTPServer(('', 8000), SimpleHTTPRequestHandler)
+        httpd.serve_forever()
+    except 
+        print('Error occured, restarting server...')
