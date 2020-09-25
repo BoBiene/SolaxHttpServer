@@ -43,5 +43,5 @@ while True:
         print("Starting server...")
         httpd = HTTPServer(('', 8000), SimpleHTTPRequestHandler)
         httpd.serve_forever()
-    except 
+    except:
         print('Error occured, restarting server...')
