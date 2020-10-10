@@ -39,8 +39,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 solaxIsOnline = True
 
             replyJson = json.loads(replyMessage)
-            replyJson['DeviceIsOnline'] = solaxIsOnline
+            
             if solaxIsOnline is False:
+                replyJson['DeviceIsOnline'] = 0
                 replyJson["PV1 Current"] = 0
                 replyJson["PV2 Current"] = 0
                 replyJson["PV1 Voltage"] = 0
@@ -67,7 +68,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 replyJson["Total Feed-in Energy"] = replyJson["Total Feed-in Energy"] if "Total Feed-in Energy" in replyJson else 0
                 replyJson["Total Consumption"] = replyJson["Total Consumption"] if "Total Consumption" in replyJson else 0
                 replyJson["Today's Energy"] = replyJson["Today's Energy"] if "Today's Energy" in replyJson else 0
-            
+            else:
+                replyJson['DeviceIsOnline'] = 1
             replyMessage = json.dumps(replyJson, indent=4)
             self.send_response(200)
             self.end_headers()
