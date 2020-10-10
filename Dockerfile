@@ -1,5 +1,6 @@
 
-FROM python:3.6
+ARG ARCH=
+FROM ${ARCH}python
 
 ENV SOLAX_IP="5.8.8.8"
 
