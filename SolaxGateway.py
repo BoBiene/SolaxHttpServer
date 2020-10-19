@@ -67,7 +67,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 replyJson["Total Energy"] =  replyJson["Total Energy"] if "Total Energy" in replyJson else 0
                 replyJson["Total Feed-in Energy"] = replyJson["Total Feed-in Energy"] if "Total Feed-in Energy" in replyJson else 0
                 replyJson["Total Consumption"] = replyJson["Total Consumption"] if "Total Consumption" in replyJson else 0
-                replyJson["Today's Energy"] = replyJson["Today's Energy"] if "Today's Energy" in replyJson else 0
+                replyJson["Today's Energy"] = 0
             else:
                 replyJson['DeviceIsOnline'] = 1
             replyMessage = json.dumps(replyJson, indent=4)
