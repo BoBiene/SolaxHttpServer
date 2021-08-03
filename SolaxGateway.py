@@ -8,7 +8,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 
 
 async def LoadSolaxData():
-    r = await solax.real_time_api(os.environ['SOLAX_IP'])
+    r = await solax.real_time_api(os.environ['SOLAX_IP'],80,'admin')
     return await r.get_data()
 
 
