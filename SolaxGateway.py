@@ -1,9 +1,9 @@
-import solax
+import solax.solax
 import asyncio
 import json
 import os
 
-from solax import inverter
+from solax.solax import inverter
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 
@@ -20,6 +20,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if self.path == "/favicon.ico":
             self.send_response(404)
             self.end_headers()
+        elif self.path == "/raw_json":
+            replyMessage = LoadSolaxData().raw_json
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(replyMessage.encode('utf-8'))
         else:
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
