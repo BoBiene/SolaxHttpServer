@@ -1,16 +1,36 @@
-import solax.solax
+import sys
+sys.path.insert(0, './solax')
+
+import solax
 import asyncio
 import json
 import os
 
-from solax.solax import inverter
+from solax import inverter
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 
 async def LoadSolaxData():
     # r = await solax.real_time_api(os.environ['SOLAX_IP'],80,'admin')
-    r = solax.RealTimeAPI(inverter.X1MiniV34('5.8.8.8',80,'admin'))
+    r = solax.RealTimeAPI(inverter.X1MiniV34(os.environ['SOLAX_IP'],80,'admin'))
     return await r.get_data()
+
+def syncLoadData():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    responseTasks, timedout = loop.run_until_complete(
+        asyncio.wait([LoadSolaxData()], timeout=30))
+    response=None
+
+    if(timedout):
+        [task.cancel() for task in timedout]
+        loop.run_until_complete(asyncio.wait(timedout))
+    else:
+        responseTask = responseTasks.pop()
+        response=responseTask.result()
+
+    return (response, timedout)
+            
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -21,25 +41,26 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
         elif self.path == "/raw_json":
-            replyMessage = LoadSolaxData().raw_json
+            response, timedout = syncLoadData()
+
+            print("timedout{}, response: {}".format(timedout,response))
+            if(timedout):
+                replyMessage='{ "DeviceIsOnline":0  }'
+            else:    
+                replyMessage = response.raw_json
             self.send_response(200)
             self.end_headers()
             self.wfile.write(replyMessage.encode('utf-8'))
         else:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            responseTasks, timedout = loop.run_until_complete(
-                asyncio.wait([LoadSolaxData()], timeout=10))
             replyMessage = ""
             solaxIsOnline = False
+
+            response, timedout = syncLoadData()
+          
             if timedout:
-                [task.cancel() for task in timedout]
-                loop.run_until_complete(asyncio.wait(timedout))
                 replyMessage = SimpleHTTPRequestHandler.offline_message
                 solaxIsOnline = False
             else:
-                responseTask = responseTasks.pop()
-                response = responseTask.result()
                 replyMessage = json.dumps(response.data)
                 SimpleHTTPRequestHandler.offline_message = replyMessage
                 solaxIsOnline = True
