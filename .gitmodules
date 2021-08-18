@@ -1,0 +1,4 @@
+[submodule "solax"]
+	path = solax
+	url = https://github.com/BoBiene/solax.git
+	branch = rawJson

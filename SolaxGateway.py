@@ -1,14 +1,15 @@
 import solax
 import asyncio
 import json
-import sys
 import os
 
+from solax import inverter
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 
 async def LoadSolaxData():
-    r = await solax.real_time_api(os.environ['SOLAX_IP'],80,'admin')
+    # r = await solax.real_time_api(os.environ['SOLAX_IP'],80,'admin')
+    r = solax.RealTimeAPI(inverter.X1MiniV34('5.8.8.8',80,'admin'))
     return await r.get_data()
 
 
