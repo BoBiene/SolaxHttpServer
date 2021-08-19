@@ -4,9 +4,11 @@ FROM ${ARCH}python
 
 ENV SOLAX_IP="5.8.8.8"
 
-# RUN pip install solax
+RUN pip install aiohttp
+RUN pip install voluptuous
+
 COPY solax/solax solax/solax
-RUN python solax/setup.py install
+
 
 COPY SolaxGateway.py .
 
