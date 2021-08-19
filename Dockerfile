@@ -4,7 +4,8 @@ FROM ${ARCH}python
 
 ENV SOLAX_IP="5.8.8.8"
 
-RUN pip install solax
+# RUN pip install solax
+COPY solax/solax solax/solax
 COPY SolaxGateway.py .
 
 EXPOSE 8000
